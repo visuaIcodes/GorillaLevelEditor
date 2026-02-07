@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using GorillaLevelEditor.Constants;
 using GorillaLocomotion;
 using GorillaNetworking;
 using UnityEngine;
@@ -11,12 +12,10 @@ namespace GorillaLevelEditor.Core.Editor
         private Camera camera = null;
         private Vector3 position = Vector3.zero;
 
-        private float moveSpeed = 10;
-        private float pitch = 0;
-        private float yaw = 0;
-        private float mouseSensitivity = 13;
-
-        private float lerp = 35;
+        // mouse smoothing variables
+        private Vector2 targetLook;
+        private Vector2 smoothLook;
+        private Vector2 lookVelocity;
 
         GTPlayer player => GTPlayer.Instance;
 
@@ -43,15 +42,21 @@ namespace GorillaLevelEditor.Core.Editor
                 return;
             }
 
-            Vector2 delta = Mouse.current.delta.value;
+            float sensitivity = EditorConstants.DEFAULT_MOUSE_SENSITIVTY;
 
-            yaw += delta.x * mouseSensitivity * dt;
-            pitch -= delta.y * mouseSensitivity * dt;
-            pitch = Mathf.Clamp(pitch, -89, 89);
+            Vector2 mouseDelta = Mouse.current.delta.value;
+            targetLook.x += mouseDelta.x * sensitivity * dt;
+            targetLook.y -= mouseDelta.y * sensitivity * dt;
+            targetLook.y = Mathf.Clamp(targetLook.y, -89, 89);
 
-            Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
-            camera.transform.rotation = Quaternion.Lerp(camera.transform.rotation, rotation, lerp * Time.deltaTime);
-            player.transform.rotation = Quaternion.Lerp(player.transform.rotation, Quaternion.Euler(0, yaw, 0), lerp * Time.deltaTime);
+            smoothLook = Vector2.SmoothDamp(smoothLook, targetLook, ref lookVelocity, EditorConstants.MOUSE_LOOK_SMOOTHNESS,
+                Mathf.Infinity, dt);
+
+            Quaternion cameraRotation = Quaternion.Euler(smoothLook.y, smoothLook.x, 0);
+            Quaternion playerRotation = Quaternion.Euler(0, smoothLook.x, 0);
+
+            camera.transform.rotation = cameraRotation;
+            player.transform.rotation = playerRotation;
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -63,7 +68,7 @@ namespace GorillaLevelEditor.Core.Editor
                 return;
 
             Vector3 moveDelta = Vector3.zero;
-            float currentMoveSpeed = moveSpeed;
+            float currentMoveSpeed = EditorConstants.DEFAULT_MOVE_SPEED;
 
             if (UnityInput.Current.GetKey(KeyCode.W))
                 moveDelta += camera.transform.forward;
@@ -79,7 +84,7 @@ namespace GorillaLevelEditor.Core.Editor
                 moveDelta += -camera.transform.up;
 
             if (UnityInput.Current.GetKey(KeyCode.LeftShift) || UnityInput.Current.GetKey(KeyCode.RightShift))
-                currentMoveSpeed *= 3;
+                currentMoveSpeed *= EditorConstants.SHIFT_MOVE_MULTIPLIER;
 
             moveDelta.Normalize();
             SetPosition(position + moveDelta * currentMoveSpeed * dt);
@@ -87,7 +92,7 @@ namespace GorillaLevelEditor.Core.Editor
 
         public void SetPosition(Vector3 newPosition)
         {
-            float t = lerp * Time.deltaTime;
+            float t = EditorConstants.LERP * Time.deltaTime;
 
             position = newPosition;
             player.transform.position = Vector3.Lerp(player.transform.position, newPosition, t);

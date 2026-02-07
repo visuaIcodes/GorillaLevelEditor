@@ -1,0 +1,1 @@
+start "" "C:/Personal/Programs/Steam/steamapps/common/Gorilla Tag/Gorilla Tag.exe"
