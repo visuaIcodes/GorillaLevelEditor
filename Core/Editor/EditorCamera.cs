@@ -17,7 +17,12 @@ namespace GorillaLevelEditor.Core.Editor
         private Vector2 smoothLook;
         private Vector2 lookVelocity;
 
-        GTPlayer player => GTPlayer.Instance;
+        private GTPlayer player => GTPlayer.Instance;
+
+        public Vector3 GetPosition()
+        {
+            return position;
+        }
 
         public void Initialize()
         {
@@ -27,7 +32,11 @@ namespace GorillaLevelEditor.Core.Editor
 
         public void Update()
         {
-            GTPlayer.Instance.enabled = EditorManager.InsidePlaymode;
+            player.enabled = EditorManager.InsidePlaymode;
+            GorillaTagger.Instance.rigidbody.isKinematic = !player.enabled;
+
+            if (!player.enabled)
+                GorillaTagger.Instance.rigidbody.linearVelocity = Vector3.zero;
 
             UpdateMouse(Time.deltaTime);
             UpdateMovement(Time.deltaTime);
@@ -97,6 +106,11 @@ namespace GorillaLevelEditor.Core.Editor
             position = newPosition;
             player.transform.position = Vector3.Lerp(player.transform.position, newPosition, t);
             camera.transform.position = Vector3.Lerp(camera.transform.position, newPosition, t);
+        }
+
+        internal Vector3 GetForward()
+        {
+            return camera.transform.forward;
         }
     }
 }

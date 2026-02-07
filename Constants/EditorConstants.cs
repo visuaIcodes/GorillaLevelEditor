@@ -13,5 +13,7 @@ namespace GorillaLevelEditor.Constants
         public const float LERP = 25;
 
         public const float MOUSE_LOOK_SMOOTHNESS = 0.05f;
+
+        public const float MAX_SELECT_GAMEOBJECT_DISTANCE = 50f;
     }
 }

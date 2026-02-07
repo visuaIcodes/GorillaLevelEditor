@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <Folder Include="References\bepinex\" />
+    <Folder Include="References\imgui\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -117,6 +118,9 @@
     </Reference>
     <Reference Include="HarmonyXInterop">
       <HintPath>References\bepinex\HarmonyXInterop.dll</HintPath>
+    </Reference>
+    <Reference Include="ImGui.NET">
+      <HintPath>References\imgui\ImGui.NET.dll</HintPath>
     </Reference>
     <Reference Include="KID">
       <HintPath>References\KID.dll</HintPath>
@@ -757,7 +761,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy /Y &quot;$(TargetPath)&quot; &quot;C:\Personal\Programs\Steam\steamapps\common\Gorilla Tag\BepInEx\plugins\&quot;" />
+    <Exec Command="copy /Y &quot;$(TargetPath)&quot; &quot;C:\Personal\Programs\Steam\steamapps\common\Gorilla Tag\BepInEx\plugins\GorillaLevelEditor\&quot;" />
   </Target>
 
 </Project>

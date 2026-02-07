@@ -37,6 +37,7 @@
           "geometry3Sharp": "0.0.0.0",
           "GT_CustomMapSupportRuntime": "1.0.0.0",
           "HarmonyXInterop": "1.0.0.0",
+          "ImGui.NET": "1.84.0.0",
           "KID": "0.0.0.0",
           "LIV.LCK": "0.0.0.0",
           "LIV.LCK.Streaming": "0.0.0.0",
@@ -475,6 +476,14 @@
           "HarmonyXInterop.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ImGui.NET/1.84.0.0": {
+        "runtime": {
+          "ImGui.NET.dll": {
+            "assemblyVersion": "1.84.0.0",
+            "fileVersion": "1.84.0.0"
           }
         }
       },
@@ -2318,6 +2327,11 @@
       "sha512": ""
     },
     "HarmonyXInterop/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ImGui.NET/1.84.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
